@@ -12,8 +12,8 @@ UnaryOpStream : Stream {
 		if (vala.isNil, { ^nil },{ ^vala.perform(operator); });
 	}
 	reset { a.reset }
+	p { ^Punop(operator, a) }
 	storeOn { arg stream; stream <<< a << "." << operator }
-
 }
 
 BinaryOpStream : Stream {
@@ -31,7 +31,7 @@ BinaryOpStream : Stream {
 		^vala.perform(operator, valb);
 	}
 	reset { a.reset; b.reset }
-
+	p { ^Pbinop(operator, a, b) }
 	storeOn { arg stream;
 			stream << "(" <<< a << " " << operator.asBinOpString << " " <<< b << ")"
 	}
@@ -64,6 +64,7 @@ BinaryOpXStream : Stream {
 		^vala.perform(operator, valb);
 	}
 	reset { vala = nil; a.reset; b.reset }
+	p { ^Pbinop(operator, a, b, \x) }
 	storeOn { arg stream;
 			stream << "(" <<< a << " " << operator.asBinOpString;
 			stream << ".x";
@@ -98,6 +99,6 @@ NAryOpStream : Stream {
 		^vala.performList(operator, values);
 	}
 	reset { a.reset; arglist.do({ arg item; item.reset }) }
-
+	p { ^Pnaryop(operator, a, arglist) }
 	storeOn { arg stream; stream <<< a << "." << operator << "(" <<<* arglist << ")" }
 }
