@@ -234,6 +234,7 @@ OneShotStream : Stream {
 	}
 	next { ^if (once) {once = false; value} }
 	reset { once = true }
+	p { ^Prout { value.yield } }
 	storeArgs { ^[value] }
 }
 
@@ -273,6 +274,7 @@ FuncStream : Stream {
 	reset {
 		^envir.use({ resetFunc.value })
 	}
+	p { ^Pfunc(nextFunc, resetFunc) }
 	storeArgs { ^[nextFunc, resetFunc] }
 }
 
